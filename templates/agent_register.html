@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block title %}Agent Registration - Insurance Portal{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+        <div class="card mt-5">
+            <div class="card-body p-5">
+                <div class="text-center mb-4">
+                    <i class="bi bi-briefcase-fill" style="font-size: 3rem; color: #667eea;"></i>
+                    <h2 class="mt-3">Agent Registration</h2>
+                    <p class="text-muted">Join as an insurance agent</p>
+                </div>
+                
+                <form method="POST" action="{{ url_for('agent_register') }}">
+                    {{ form.hidden_tag() }}
+                    
+                    <div class="mb-3">
+                        <label for="email" class="form-label">
+                            <i class="bi bi-envelope"></i> Email Address
+                        </label>
+                        {{ form.email(class="form-control", placeholder="agent@company.com") }}
+                        {% if form.email.errors %}
+                            <div class="text-danger mt-1">
+                                {% for error in form.email.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="username" class="form-label">
+                            <i class="bi bi-person"></i> Username
+                        </label>
+                        {{ form.username(class="form-control", placeholder="Choose a username") }}
+                        {% if form.username.errors %}
+                            <div class="text-danger mt-1">
+                                {% for error in form.username.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="password" class="form-label">
+                            <i class="bi bi-lock"></i> Password
+                        </label>
+                        {{ form.password(class="form-control", placeholder="Minimum 6 characters") }}
+                        {% if form.password.errors %}
+                            <div class="text-danger mt-1">
+                                {% for error in form.password.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="company_name" class="form-label">
+                            <i class="bi bi-building"></i> Company Name
+                        </label>
+                        {{ form.company_name(class="form-control", placeholder="Insurance Company Name") }}
+                        {% if form.company_name.errors %}
+                            <div class="text-danger mt-1">
+                                {% for error in form.company_name.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="agent_code" class="form-label">
+                            <i class="bi bi-shield-check"></i> Agent Code
+                        </label>
+                        {{ form.agent_code(class="form-control", placeholder="Your unique agent code") }}
+                        <small class="text-muted">Enter your company-provided agent code</small>
+                        {% if form.agent_code.errors %}
+                            <div class="text-danger mt-1">
+                                {% for error in form.agent_code.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-lg w-100 mb-3">
+                        <i class="bi bi-check-circle"></i> Register as Agent
+                    </button>
+                    
+                    <div class="text-center">
+                        <p class="mb-0">Already have an agent account? 
+                            <a href="{{ url_for('agent_login') }}" class="text-decoration-none">Login here</a>
+                        </p>
+                        <p class="mt-2 mb-0">
+                            <a href="{{ url_for('register') }}" class="text-decoration-none">Register as Customer</a>
+                        </p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block title %}Submit Claim - Insurance Portal{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-7">
+        <div class="card">
+            <div class="card-body p-5">
+                <div class="mb-4">
+                    <h2>
+                        <i class="bi bi-file-earmark-plus"></i> Submit Insurance Claim
+                    </h2>
+                    <p class="text-muted">Fill in the details below to submit your claim request</p>
+                </div>
+                
+                <form method="POST" action="{{ url_for('submit_claim') }}" enctype="multipart/form-data">
+                    {{ form.hidden_tag() }}
+                    
+                    <!-- Policy Type -->
+                    <div class="mb-4">
+                        <label for="policy_type" class="form-label">
+                            <i class="bi bi-shield"></i> Policy Type <span class="text-danger">*</span>
+                        </label>
+                        {{ form.policy_type(class="form-select form-select-lg", id="policy_type") }}
+                        {% if form.policy_type.errors %}
+                            <div class="text-danger mt-1">
+                                {% for error in form.policy_type.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Prefilled Policy Info Panel -->
+                    {% if selected_policy %}
+                    <div class="mb-4">
+                        <div class="card bg-light p-3 border">
+                            <h5 class="mb-1">{{ selected_policy.name }}</h5>
+                            <p class="mb-2 text-muted">{{ selected_policy.description }}</p>
+                            <div class="small">
+                                <strong>Premium:</strong> ₹{{ "{:,.2f}".format(selected_policy.premium) }} |
+                                <strong>Coverage:</strong> ₹{{ "{:,.2f}".format(selected_policy.coverage_amount) }}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Claim Amount -->
+                    <div class="mb-4">
+                        <label for="claim_amount" class="form-label">
+                            <i class="bi bi-currency-rupee"></i> Claim Amount <span class="text-danger">*</span>
+                        </label>
+                        {{ form.claim_amount(class="form-control form-control-lg",
+                                            placeholder="Enter amount in ₹",
+                                            type="number",
+                                            step="0.01",
+                                            min="1") }}
+                        {% if form.claim_amount.errors %}
+                            <div class="text-danger mt-1">
+                                {% for error in form.claim_amount.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Description -->
+                    <div class="mb-4">
+                        <label for="description" class="form-label">
+                            <i class="bi bi-card-text"></i> Claim Description <span class="text-danger">*</span>
+                        </label>
+                        {{ form.description(class="form-control",
+                                            rows="5",
+                                            placeholder="Provide detailed description of your claim (minimum 10 characters)") }}
+                        <small class="text-muted">Explain the incident, damages, or medical expenses in detail</small>
+                        {% if form.description.errors %}
+                            <div class="text-danger mt-1">
+                                {% for error in form.description.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Document Upload -->
+                    <div class="mb-4">
+                        <label for="document" class="form-label">
+                            <i class="bi bi-paperclip"></i> Supporting Documents
+                        </label>
+                        <input type="file"
+                               class="form-control form-control-lg"
+                               id="document"
+                               name="document"
+                               accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
+                        <small class="text-muted">Upload bills, receipts, photos, or medical reports (Max 10MB)</small>
+                    </div>
+                    
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle"></i> 
+                        <strong>Note:</strong> Your claim will be reviewed by our team. 
+                        You will receive a unique reference ID upon submission to track your claim status.
+                    </div>
+                    
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg flex-grow-1">
+                            <i class="bi bi-check-circle"></i> Submit Claim
+                        </button>
+                        <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary btn-lg">
+                            <i class="bi bi-x-circle"></i> Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}My Policies - Insurance Portal{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4"><i class="bi bi-card-checklist"></i> My Purchased Policies</h2>
+
+    {% if purchases %}
+        <div class="row">
+            {% for purchase in purchases %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ purchase.policy.name }}</h5>
+                        <p class="text-muted">{{ purchase.policy.description }}</p>
+                        <ul class="list-unstyled small">
+                            <li><strong>Premium:</strong> ₹{{ "{:,.2f}".format(purchase.policy.premium) }}</li>
+                            <li><strong>Coverage:</strong> ₹{{ "{:,.2f}".format(purchase.policy.coverage_amount) }}</li>
+                            <li><strong>Purchased On:</strong> {{ purchase.purchase_date.strftime("%Y-%m-%d %H:%M") }}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="text-center py-5">
+            <i class="bi bi-inbox" style="font-size: 4rem; color: #ccc;"></i>
+            <h4 class="mt-3">No purchased policies yet</h4>
+            <p class="text-muted">Browse and buy available policies to see them here.</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

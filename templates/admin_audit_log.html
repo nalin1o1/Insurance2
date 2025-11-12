@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Audit Log{% endblock %}
+
+{% block content %}
+<div class="container mt-3">
+  <h4>Audit Log (recent)</h4>
+  <div class="table-responsive">
+    <table class="table table-hover">
+      <thead><tr><th>Time</th><th>Actor</th><th>Action</th><th>Target User</th></tr></thead>
+      <tbody>
+        {% for l in logs %}
+        <tr>
+          <td>{{ l.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+          <td>{{ l.actor_role }}{% if l.actor_id %} ({{ l.actor_id }}){% endif %}</td>
+          <td>{{ l.action }}</td>
+          <td>{{ l.target_user_id or '-' }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Add Policy - Agent{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="card">
+            <div class="card-body p-4">
+                <h3 class="mb-4"><i class="bi bi-plus-circle"></i> Add New Policy</h3>
+                <form method="POST">
+                    {{ form.hidden_tag() }}
+
+                    <div class="mb-3">
+                        <label class="form-label">Policy Name</label>
+                        {{ form.name(class="form-control") }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
+                        {{ form.description(class="form-control", rows="3") }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Premium (₹)</label>
+                        {{ form.premium(class="form-control") }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Coverage Amount (₹)</label>
+                        {{ form.coverage_amount(class="form-control") }}
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-check-circle"></i> Save Policy
+                    </button>
+                    <a href="{{ url_for('agent_policies') }}" class="btn btn-outline-secondary">
+                        Cancel
+                    </a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

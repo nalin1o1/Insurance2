@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Manage Users{% endblock %}
+
+{% block content %}
+<div class="container mt-3">
+  <h4>Users</h4>
+  <div class="table-responsive">
+    <table class="table table-hover">
+      <thead><tr><th>ID</th><th>Username</th><th>Email</th><th>KYC</th><th>Active</th><th>Actions</th></tr></thead>
+      <tbody>
+        {% for u in users %}
+        <tr>
+          <td>{{ u.id }}</td>
+          <td>{{ u.username }}</td>
+          <td>{{ u.email }}</td>
+          <td>{{ u.kyc_status }}</td>
+          <td>{{ 'Yes' if u.active else 'No' }}</td>
+          <td>
+            {% if u.active %}
+              <form method="POST" action="{{ url_for('admin_user_suspend', user_id=u.id) }}" style="display:inline">
+                <button class="btn btn-sm btn-warning">Suspend</button>
+              </form>
+            {% else %}
+              <form method="POST" action="{{ url_for('admin_user_activate', user_id=u.id) }}" style="display:inline">
+                <button class="btn btn-sm btn-success">Activate</button>
+              </form>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

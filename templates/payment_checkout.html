@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Buy Policy{% endblock %}
+{% block content %}
+<div class="container mt-5 text-center">
+  <h2><i class="bi bi-credit-card"></i> Buy Policy</h2>
+  <div class="card mx-auto mt-4" style="max-width: 500px;">
+    <div class="card-body">
+      <h4>{{ policy.name }}</h4>
+      <p class="text-muted">{{ policy.description }}</p>
+      <ul class="list-unstyled small mb-4">
+        <li><strong>Premium:</strong> ₹{{ "{:,.2f}".format(policy.premium) }}</li>
+        <li><strong>Coverage:</strong> ₹{{ "{:,.2f}".format(policy.coverage_amount) }}</li>
+      </ul>
+      <a href="{{ url_for('payment_success', policy_id=policy.id) }}" class="btn btn-success me-2">
+        <i class="bi bi-check2-circle"></i> Pay Now
+      </a>
+      <a href="{{ url_for('payment_cancel') }}" class="btn btn-outline-danger">
+        <i class="bi bi-x-circle"></i> Cancel
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}

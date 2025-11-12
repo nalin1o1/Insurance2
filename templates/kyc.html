@@ -1,0 +1,179 @@
+{% extends "base.html" %}
+
+{% block title %}KYC Verification{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-id-card me-2"></i>KYC Verification
+                    </h4>
+                </div>
+                <div class="card-body">
+                    {% if user.kyc_status == 'NotSubmitted' %}
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>
+                            Please complete your KYC verification to purchase policies and submit claims.
+                        </div>
+                    {% elif user.kyc_status == 'Pending' %}
+                        <div class="alert alert-warning">
+                            <i class="fas fa-clock me-2"></i>
+                            Your KYC submission is under review. You'll be notified once it's verified.
+                        </div>
+                        <div class="mb-3">
+                            <h6>Submitted Details:</h6>
+                            <p><strong>Aadhar:</strong> {{ user.aadhar }}</p>
+                            <p><strong>PAN:</strong> {{ user.pan }}</p>
+                            {% if user.kyc_doc %}
+                                <p><strong>Document:</strong> <a href="{{ url_for('upload', filename=user.kyc_doc) }}" target="_blank">View Document</a></p>
+                            {% endif %}
+                        </div>
+                    {% elif user.kyc_status == 'Verified' %}
+                        <div class="alert alert-success">
+                            <i class="fas fa-check-circle me-2"></i>
+                            Your KYC has been verified successfully!
+                        </div>
+                        <div class="mb-3">
+                            <h6>Verified Details:</h6>
+                            <p><strong>Aadhar:</strong> {{ user.aadhar }}</p>
+                            <p><strong>PAN:</strong> {{ user.pan }}</p>
+                        </div>
+                        <a href="{{ url_for('browse_policies') }}" class="btn btn-primary">
+                            <i class="fas fa-shopping-cart me-2"></i>Browse Policies
+                        </a>
+                    {% elif user.kyc_status == 'Rejected' %}
+                        <div class="alert alert-danger">
+                            <i class="fas fa-times-circle me-2"></i>
+                            Your KYC verification was rejected. Please submit correct information.
+                        </div>
+                    {% endif %}
+
+                    {% if user.kyc_status in ['NotSubmitted', 'Rejected'] %}
+                        <form method="POST" enctype="multipart/form-data" class="mt-4">
+                            {{ form.hidden_tag() }}
+                            
+                            <div class="mb-3">
+                                <label for="aadhar" class="form-label">
+                                    <i class="fas fa-id-badge me-2"></i>Aadhar Number
+                                </label>
+                                {{ form.aadhar(class="form-control", placeholder="Enter your Aadhar number") }}
+                                {% if form.aadhar.errors %}
+                                    <div class="text-danger mt-1">
+                                        {% for error in form.aadhar.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                <small class="form-text text-muted">12-digit Aadhar number</small>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="pan" class="form-label">
+                                    <i class="fas fa-credit-card me-2"></i>PAN Number
+                                </label>
+                                {{ form.pan(class="form-control", placeholder="Enter your PAN number", style="text-transform: uppercase;") }}
+                                {% if form.pan.errors %}
+                                    <div class="text-danger mt-1">
+                                        {% for error in form.pan.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                <small class="form-text text-muted">10-character PAN (e.g., ABCDE1234F)</small>
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="doc" class="form-label">
+                                    <i class="fas fa-file-upload me-2"></i>Upload Document
+                                </label>
+                                <input type="file" class="form-control" id="doc" name="doc" accept=".pdf,.jpg,.jpeg,.png" required>
+                                <small class="form-text text-muted">Upload Aadhar/PAN card (PDF, JPG, PNG - Max 5MB)</small>
+                            </div>
+
+                            <div class="alert alert-light border">
+                                <h6 class="mb-2"><i class="fas fa-shield-alt me-2"></i>Security & Privacy</h6>
+                                <ul class="mb-0 small">
+                                    <li>Your documents are encrypted and stored securely</li>
+                                    <li>Information is used only for verification purposes</li>
+                                    <li>We comply with data protection regulations</li>
+                                </ul>
+                            </div>
+
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-paper-plane me-2"></i>Submit KYC
+                                </button>
+                                <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary">
+                                    <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+                                </a>
+                            </div>
+                        </form>
+                    {% else %}
+                        <div class="d-grid gap-2 mt-4">
+                            <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- KYC Guidelines -->
+            <div class="card mt-4 shadow-sm">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>KYC Guidelines</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="text-primary"><i class="fas fa-check-circle me-2"></i>Accepted Documents</h6>
+                            <ul class="small">
+                                <li>Aadhar Card (front & back)</li>
+                                <li>PAN Card</li>
+                                <li>Passport</li>
+                                <li>Voter ID</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-primary"><i class="fas fa-exclamation-triangle me-2"></i>Important Notes</h6>
+                            <ul class="small">
+                                <li>Ensure documents are clear and readable</li>
+                                <li>All information must match official records</li>
+                                <li>Verification typically takes 24-48 hours</li>
+                                <li>You'll receive an email notification</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.card {
+    border-radius: 10px;
+}
+
+.card-header {
+    border-top-left-radius: 10px !important;
+    border-top-right-radius: 10px !important;
+}
+
+.form-control:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+.btn {
+    border-radius: 5px;
+}
+
+.alert {
+    border-radius: 8px;
+}
+</style>
+{% endblock %}

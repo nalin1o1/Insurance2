@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Compare Policies{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2 class="mb-4 text-center"><i class="bi bi-bar-chart"></i> Policy Comparison</h2>
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped text-center align-middle">
+      <thead class="table-primary">
+        <tr>
+          <th>Feature</th>
+          {% for policy in policies %}
+          <th>{{ policy.name }}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Description</strong></td>
+          {% for policy in policies %}
+          <td>{{ policy.description }}</td>
+          {% endfor %}
+        </tr>
+        <tr>
+          <td><strong>Premium</strong></td>
+          {% for policy in policies %}
+          <td>₹{{ "{:,.2f}".format(policy.premium) }}</td>
+          {% endfor %}
+        </tr>
+        <tr>
+          <td><strong>Coverage Amount</strong></td>
+          {% for policy in policies %}
+          <td>₹{{ "{:,.2f}".format(policy.coverage_amount) }}</td>
+          {% endfor %}
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="text-center mt-4">
+    <a href="{{ url_for('browse_policies') }}" class="btn btn-secondary">
+      <i class="bi bi-arrow-left"></i> Back to Policies
+    </a>
+  </div>
+</div>
+{% endblock %}
